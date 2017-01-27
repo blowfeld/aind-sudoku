@@ -35,7 +35,9 @@ def convert_position(pos):
     return(setup.ROWS[pos // len(setup.ROWS)] + setup.COLS[pos % len(setup.COLS)])
 
 
+
 if __name__ == '__main__':
+    print("Run util:")
     grid = '483921657967345821251876493548132976729564138136798245372689514814253769695417382'
     display(parse_sudoku_string(grid))
     print(parse_sudoku_string(grid))

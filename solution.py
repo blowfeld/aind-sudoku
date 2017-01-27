@@ -1,3 +1,12 @@
+"""
+This module solely provides a wrapper to make the code in the imported modules
+compliant with the expected solution format. For implementations and method
+documentation please refer to the imported modules.
+
+This choice was made to make the code more structured and avoid the naming
+inconsistencies in this module.
+"""
+
 import setup
 import strategy
 import ui
@@ -16,7 +25,7 @@ def assign_value(values, box, value):
         assignments.append(values.copy())
     return values
 
-def naked_twins(sudoku):
+def naked_twins(values):
     """Eliminate values using the naked twins strategy.
     Args:
         values(dict): a dictionary of the form {'box_name': '123456789', ...}
@@ -24,13 +33,13 @@ def naked_twins(sudoku):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-    return strategy.naked_twins(sudoku)
+    return strategy.naked_twins(values)
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
     return [ s + t for s in A for t in B ]
 
-def grid_values(sudoku_string):
+def grid_values(grid):
     """
     Convert grid into a dict of {square: char} with '123456789' for empties.
     Args:
@@ -40,29 +49,29 @@ def grid_values(sudoku_string):
             Keys: The boxes, e.g., 'A1'
             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
     """
-    return util.parse_sudoku_string(sudoku_string)
+    return util.parse_sudoku_string(grid)
 
-def display(sudoku):
+def display(values):
     """
     Display the values as a 2-D grid.
     Args:
         values(dict): The sudoku in dictionary form
     """
-    util.display(sudoku)
+    util.display(values)
 
-def eliminate(sudoku):
-    return strategy.eliminate(sudoku)
+def eliminate(values):
+    return strategy.eliminate(values)
 
-def only_choice(sudoku):
-    return strategy.only_choice(sudoku)
+def only_choice(values):
+    return strategy.only_choice(values)
 
-def reduce_puzzle(sudoku):
-    return strategy.reduce_puzzle(sudoku)
+def reduce_puzzle(values):
+    return strategy.reduce_puzzle(values)
 
-def search(sudoku):
-    return strategy.search(sudoku)
+def search(values):
+    return strategy.search(values)
 
-def solve(sudoku_string, diagonal = True):
+def solve(grid, diagonal = True):
     """
     Find the solution to a Sudoku grid.
     Args:
@@ -74,7 +83,8 @@ def solve(sudoku_string, diagonal = True):
     if not diagonal:
         setup.deactivate_diagonal_constraints()
 
-    return search(util.parse_sudoku_string(sudoku_string))
+    result = strategy.search(util.parse_sudoku_string(grid))
+    return result if result else False
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'

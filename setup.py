@@ -24,7 +24,10 @@ def deactivate_diagonal_constraints():
     PEERS = dict((s, set(sum(UNITS[s], [])) - set([s])) for s in BOXES)
 
 
+
 if __name__ == '__main__':
+    print("Run setup:")
+
     from pprint import pprint
 
     pprint("ROWS")

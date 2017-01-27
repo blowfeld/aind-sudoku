@@ -9,6 +9,12 @@ A: *Naked twins* provides the following constraint on the choices possible in a 
     a value. As a consequence of that, this `n` choices can be removed from all
     other boxes in the unit. This constraint can be propagated by applying it
     repeatedly in the same way as elimination or the only choice constraint.
+    *Remarks*:
+
+* The required solution might require `n=2` (?), the implementation
+      provided here, however, doesn't make this constraint.
+*  The provided implementation ignores `n=1`, as this is already covered by
+      the elimination strategy.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
@@ -36,7 +42,13 @@ If not, please see how to download pygame [here](http://www.pygame.org/download.
 
 ### Code
 
-* `solutions.py` - You'll fill this in as part of your solution.
+* `solutions.py` - Provides a module with the required format for the solution.
+The module is implemented using the following modules:
+> * `setup.py` - Provides static data that defines the setup of the Sudoku game.
+> * `strategy.py` - Provides implementations of the solution strategies, such as
+elimination, only choice, naked twins, constraint propagation and search.
+> * `util.py` - Provides utility functions
+> * `ui.py` - Provides access to the provided visualization functionality.
 * `solution_test.py` - Do not modify this. You can test your solution by running `python solution_test.py`.
 * `PySudoku.py` - Do not modify this. This is code for visualizing your solution.
 * `visualize.py` - Do not modify this. This is code for visualizing your solution.

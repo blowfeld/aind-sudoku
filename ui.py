@@ -1,3 +1,8 @@
+"""
+This module provides a workaround to make the visualize accessible from modules
+outside of solution.py.
+"""
+
 updates = None
 
 def update(sudoku):

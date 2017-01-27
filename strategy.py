@@ -139,7 +139,10 @@ def reduce_sudoku(sudoku, strategies = [eliminate, only_choice, naked_twins]):
     return result
 
 
+
 if __name__ == '__main__':
+    print("Run stratgy:")
+
     from pprint import pprint
     from util import *
     setup.deactivate_diagonal_constraints()

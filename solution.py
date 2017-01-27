@@ -1,4 +1,9 @@
+import display
+import strategy
+import util
+
 assignments = []
+display.updates = assignments
 
 def assign_value(values, box, value):
     """
@@ -26,7 +31,7 @@ def cross(A, B):
     "Cross product of elements in A and elements in B."
     pass
 
-def grid_values(grid):
+def grid_values(sudoku_string):
     """
     Convert grid into a dict of {square: char} with '123456789' for empties.
     Args:
@@ -36,7 +41,7 @@ def grid_values(grid):
             Keys: The boxes, e.g., 'A1'
             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
     """
-    pass
+    return util.parse_sudoku_string(sudoku_string)
 
 def display(values):
     """
@@ -55,10 +60,10 @@ def only_choice(values):
 def reduce_puzzle(values):
     pass
 
-def search(values):
-    pass
+def search(sudoku):
+    strategy.search(sudoku)
 
-def solve(grid):
+def solve(sudoku_string):
     """
     Find the solution to a Sudoku grid.
     Args:
@@ -67,6 +72,7 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
+    search(grid_values(sudoku_string))
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'

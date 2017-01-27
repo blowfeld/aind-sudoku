@@ -1,5 +1,6 @@
-import ui
+import setup
 import strategy
+import ui
 import util
 
 assignments = []
@@ -27,7 +28,7 @@ def naked_twins(sudoku):
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
-    pass
+    return [ s + t for s in A for t in B ]
 
 def grid_values(sudoku_string):
     """
@@ -41,27 +42,27 @@ def grid_values(sudoku_string):
     """
     return util.parse_sudoku_string(sudoku_string)
 
-def display(values):
+def display(sudoku):
     """
     Display the values as a 2-D grid.
     Args:
         values(dict): The sudoku in dictionary form
     """
-    pass
+    util.display(sudoku)
 
-def eliminate(values):
-    pass
+def eliminate(sudoku):
+    return strategy.eliminate(sudoku)
 
-def only_choice(values):
-    pass
+def only_choice(sudoku):
+    return strategy.only_choice(sudoku)
 
-def reduce_puzzle(values):
-    pass
+def reduce_puzzle(sudoku):
+    return strategy.reduce_puzzle(sudoku)
 
 def search(sudoku):
     return strategy.search(sudoku)
 
-def solve(sudoku_string):
+def solve(sudoku_string, diagonal = True):
     """
     Find the solution to a Sudoku grid.
     Args:
@@ -70,6 +71,9 @@ def solve(sudoku_string):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
+    if not diagonal:
+        setup.deactivate_diagonal_constraints()
+
     return search(util.parse_sudoku_string(sudoku_string))
 
 if __name__ == '__main__':

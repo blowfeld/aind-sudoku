@@ -1,7 +1,6 @@
-from setup import *
-from util import *
-from collections import defaultdict
+import setup
 import ui
+from collections import defaultdict
 
 def eliminate(sudoku):
     """
@@ -16,7 +15,7 @@ def eliminate(sudoku):
 
     result = sudoku.copy()
     for box, choice in filled_boxes.items():
-        for peer in PEERS[box]:
+        for peer in setup.PEERS[box]:
             new_choices = result[peer].replace(choice, '')
             if len(new_choices) == 0:
                 return None
@@ -33,7 +32,7 @@ def only_choice(sudoku):
     Output: The sudoku in dictionary form after selection
     """
     result = sudoku.copy()
-    for unit in UNIT_LIST:
+    for unit in setup.UNIT_LIST:
         result.update(_only_choices_in_unit(sudoku, unit))
 
     return result
@@ -48,15 +47,15 @@ def _only_choices_in_unit(sudoku, unit):
 
 def naked_twins(sudoku):
     """Eliminate values using the naked twins strategy.
-    Args:
-        sudoku(dict): a dictionary of the form {'box_name': '123456789', ...}
+    Input: the sudoku in dictonary form, mapping boxs to the possible values.
+            Keys: The boxes, e.g., 'A1'
+            Values: choices for the values in the box, e.g., '238'.
 
-    Returns:
-        the sudoku with the naked twins eliminated from units or None if the
+    Output: The sudoku with the naked twins eliminated from units or None if the
         sudoku cannot be solved.
     """
     result = sudoku.copy()
-    for unit in UNIT_LIST:
+    for unit in setup.UNIT_LIST:
         twins = _naked_twins_in_unit(sudoku, unit)
         _remove_twin_choices(result, unit, twins)
 
@@ -78,9 +77,17 @@ def _remove_twin_choices(sudoku, unit, naked_twins):
                 difference = set(sudoku[box]) - set(sudoku[next(iter(twins))])
                 sudoku[box] = ''.join(sorted(difference))
 
-def search(sudoku):
-    "Using depth-first search and propagation, create a search tree and solve the sudoku."
-    reduced = reduce_sudoku(sudoku)
+def search(sudoku, reduce_with = [eliminate, only_choice, naked_twins]):
+    """
+    Apply depth-first search and constraint propagation to solve the sudoku.
+    Input: the sudoku in dictonary form, mapping boxs to the possible values.
+            Keys: The boxes, e.g., 'A1'
+            Values: choices for the values in the box, e.g., '238'.
+        An optional list of strategies used in constraint propagation on the
+        search paths, by default eliminate, only_choice and naked_twins
+    Output: the solved sudoku in dictionary form or None if there is no solution
+    """
+    reduced = reduce_sudoku(sudoku, reduce_with)
     if not reduced:
         return None
 
@@ -98,14 +105,19 @@ def search(sudoku):
 
     return None
 
-def reduce_sudoku(sudoku):
+def reduce_sudoku(sudoku, strategies = [eliminate, only_choice, naked_twins]):
     """
-    Recursively apply the eliminate and only_choice strategies.
+    Recursively apply the provied strategies (by default eliminate, only_choice
+    and naked_twins).
     If at some point, there is a box with no available values, terminate.
     If the sudoku is solved, return the sudoku.
-    If after an iteration of both functions, the sudoku remains the same, return the sudoku.
-    Input: A sudoku in dictionary form.
-    Output: The resulting sudoku in dictionary form or None if the sudoku is not solvable.
+    If after an iteration of both functions, the sudoku remains the same, return
+    the sudoku.
+    Input: the sudoku in dictonary form, mapping boxs to the possible values.
+            Keys: The boxes, e.g., 'A1'
+            Values: choices for the values in the box, e.g., '238'.
+    Output: The sudoku in dictionary form after constraint propagation or None
+        if the sudoku is not solvable.
     """
     result = sudoku.copy()
 
@@ -113,8 +125,9 @@ def reduce_sudoku(sudoku):
     while not stalled:
         solved_boxes_before = len([box for box in result.keys() if len(result[box]) == 1])
 
-        result = eliminate(result)
-        result = only_choice(result) if result else None
+        for strategy in strategies:
+            result = strategy(result) if result else None
+
         if not result or len([box for box in result.keys() if len(result[box]) == 0]):
             return None
 
@@ -128,6 +141,8 @@ def reduce_sudoku(sudoku):
 
 if __name__ == '__main__':
     from pprint import pprint
+    from util import *
+    setup.deactivate_diagonal_constraints()
 
     print("eliminate")
     sudoku_string = '4839216579673458212518764935.81.29767295.41.81.67.82.5372689514814253769695417382'

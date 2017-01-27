@@ -6,6 +6,10 @@ def display(sudoku):
     Input: The sudoku in dictionary form
     Output: None
     """
+    if not sudoku:
+        print("Sudoku is not solvable")
+        return
+
     width = 1 + max(len(sudoku[s]) for s in BOXES)
     line = '+'.join(['-' * (width * 3)] * 3)
     for r in ROWS:
@@ -27,6 +31,7 @@ def parse_sudoku_string(sudoku_string):
 
 def convert_position(pos):
     return(ROWS[pos // len(ROWS)] + COLS[pos % len(COLS)])
+
 
 if __name__ == '__main__':
     grid = '483921657967345821251876493548132976729564138136798245372689514814253769695417382'

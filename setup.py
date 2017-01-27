@@ -10,7 +10,8 @@ BOXES = cross(ROWS, COLS)
 ROW_UNITS = [cross(r, COLS) for r in ROWS]
 COLUMN_UNITS = [cross(ROWS, c) for c in COLS]
 BOX_UNITS = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
-UNIT_LIST = ROW_UNITS + COLUMN_UNITS + BOX_UNITS
+DIAGONAL_UNITS = [[a + b for a, b in zip(ROWS, COLS)], [a + b for a, b in zip(ROWS, COLS[::-1])]]
+UNIT_LIST = ROW_UNITS + COLUMN_UNITS + BOX_UNITS + DIAGONAL_UNITS
 UNITS = dict((s, [u for u in UNIT_LIST if s in u]) for s in BOXES)
 PEERS = dict((s, set(sum(UNITS[s], [])) - set([s])) for s in BOXES)
 
@@ -29,6 +30,8 @@ if __name__ == '__main__':
     pprint(COLUMN_UNITS)
     pprint("BOX_UNITS")
     pprint(BOX_UNITS)
+    pprint("DIAGONAL_UNITS")
+    pprint(DIAGONAL_UNITS)
     pprint("UNIT_LIST")
     pprint(UNIT_LIST)
     pprint("UNITS")

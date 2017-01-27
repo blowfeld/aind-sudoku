@@ -1,9 +1,9 @@
-import display
+import ui
 import strategy
 import util
 
 assignments = []
-display.updates = assignments
+ui.updates = assignments
 
 def assign_value(values, box, value):
     """
@@ -15,7 +15,7 @@ def assign_value(values, box, value):
         assignments.append(values.copy())
     return values
 
-def naked_twins(values):
+def naked_twins(sudoku):
     """Eliminate values using the naked twins strategy.
     Args:
         values(dict): a dictionary of the form {'box_name': '123456789', ...}
@@ -23,9 +23,7 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-
-    # Find all instances of naked twins
-    # Eliminate the naked twins as possibilities for their peers
+    return strategy.naked_twins(sudoku)
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
@@ -61,7 +59,7 @@ def reduce_puzzle(values):
     pass
 
 def search(sudoku):
-    strategy.search(sudoku)
+    return strategy.search(sudoku)
 
 def solve(sudoku_string):
     """
@@ -72,7 +70,7 @@ def solve(sudoku_string):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
-    search(grid_values(sudoku_string))
+    return search(util.parse_sudoku_string(sudoku_string))
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
